@@ -14,17 +14,17 @@ def callLibrary(command: str, args: str, block: PluginBlock):
     """
 
     # Get the plugin path from the include
-    module_path = ""
+    include_path = ""
     for path in sys.path:
         if "Include" in path:
-            module_path = path
+            include_path = path
 
     conda_path = block.config["conda"]
-    command = os.path.join(module_path, "getcontacts", command)
+    command = os.path.join(include_path, "getcontacts", command)
 
     # Read the license file
     license = ""
-    with open(os.path.join(module_path, "LICENSE")) as f:
+    with open(os.path.join(include_path, "getcontacts", "LICENSE")) as f:
         license = f.read()
 
     print(license)
