@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <script src="d3.v3.min.js"></script>
+    <script src="flareplot-main.js"></script>
+    <script src="flare_view.js"></script>
+
+    <link href="flareplot-main.css" rel="stylesheet" />
+    <link href="flareplot-fingerprintpanel.css" rel="stylesheet" />
+
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="flare-container"></div>
+    <div id="flare-container-2"></div>
+    <script>
+      const jsonData = window.parent.extensionData["flareplotJSONData"];
+      const flareData = JSON.parse(jsonData);
+
+      // Get window size
+      const w = window.parent.innerWidth / 2;
+
+      const plot = createFlareplot(`${w}`, flareData, "#flare-container");
+
+      plot.addNodeToggleListener(async (e) => {
+        console.log(e);
+        // Get chain and residue number
+        const splitted = e.name.split(":");
+        const chain = splitted[0];
+        const resNum = Number(splitted[2]);
+        result = await parent.molstar.focus(undefined, resNum, chain);
+        console.log(result);
+      });
+    </script>
+  </body>
+</html>
