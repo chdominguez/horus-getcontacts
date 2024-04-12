@@ -11,10 +11,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
     createFlareplotSlider(plot, "#slider-container");
 
     plot.addNodeToggleListener(async (e) => {
-        // Get chain and residue number
+        // Get residue number
         const splitted = e.name.split(":");
-        const chain = splitted[0];
-        const resNum = Number(splitted[2]);
+        const resNum = Number(splitted[splitted.length - 1]);
         result = await parent.molstar.focus(undefined, resNum);
     });
 })

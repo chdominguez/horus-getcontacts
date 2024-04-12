@@ -1,5 +1,6 @@
 import os
 from HorusAPI import PluginBlock, PluginVariable, VariableTypes, Extensions
+from Utils.arguments import all_variables, all_itypes, general_variables
 
 # INPUTS
 topology_input_variable = PluginVariable(
@@ -33,7 +34,26 @@ def generate_dynamic_contacts(block: PluginBlock):
     output_file = structure_name + "_contacts.tsv"
 
     command = "get_dynamic_contacts.py"
-    args = f"--topology {structure_path} --trajectory {trajectory_path} --itypes all --output {output_file}"
+    args = f"--topology {structure_path} --trajectory {trajectory_path} --output {output_file}"
+
+    # Add to the args the block variables and the itypes
+    itypes = " --itypes"
+    for v in all_itypes:
+        if block.variables[v.id] == True:
+            itypes += f" {v.id}"
+
+    args += itypes
+
+    general_values = ""
+    for variable in general_variables:
+        value = block.variables.get(variable.id)  # Getting the value or None if not set
+        if value is not None:
+            if variable.id.startswith("sele"):
+                general_values += f" --{variable.id} '{value}'"
+            else:
+                general_values += f" --{variable.id} {value}"
+
+    args += general_values
 
     from Utils.call_library import callLibrary
 
@@ -48,5 +68,6 @@ generate_dynamic_contacts_block = PluginBlock(
     description="Generate a dybamic contact map for a given simulation",
     action=generate_dynamic_contacts,
     inputs=[topology_input_variable, trajectory_input_variable],
+    variables=all_variables,
     outputs=[output_tsv],
 )

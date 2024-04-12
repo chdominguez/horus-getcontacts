@@ -28,7 +28,10 @@ def callLibrary(command: str, args: str, block: PluginBlock):
         license = f.read()
 
     print(license)
-
+    print(
+        "command: ",
+        f"{conda_path} run -n nostrum_internal_plugin python '{command}' {args}",
+    )
     with subprocess.Popen(
         f"{conda_path} run -n nostrum_internal_plugin python '{command}' {args}",
         shell=True,

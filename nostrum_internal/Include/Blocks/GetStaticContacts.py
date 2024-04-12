@@ -1,5 +1,6 @@
 import os
-from HorusAPI import PluginBlock, PluginVariable, VariableTypes, Extensions
+from HorusAPI import PluginBlock, PluginVariable, VariableTypes
+from Utils.arguments import all_variables, all_itypes, general_variables
 
 # INPUTS
 topology_input_variable = PluginVariable(
@@ -7,56 +8,6 @@ topology_input_variable = PluginVariable(
     name="Topology PDB",
     description="The topology PDB file to compute its contacts",
     type=VariableTypes.STRUCTURE,
-)
-
-# VARIABLES
-
-salt_bridges_variable = PluginVariable(
-    id="salt_bridges",
-    name="Salt bridges",
-    description="Compute salt bridges interactions",
-    type=VariableTypes.BOOLEAN,
-    defaultValue=False,
-)
-
-pi_cation_variable = PluginVariable(
-    id="pi_cation",
-    name="π-cation",
-    description="Compute π-cation interactions",
-    type=VariableTypes.BOOLEAN,
-    defaultValue=False,
-)
-
-pi_stacking_variable = PluginVariable(
-    id="pi_stacking",
-    name="π-stacking",
-    description="Compute π-stacking interactions",
-    type=VariableTypes.BOOLEAN,
-    defaultValue=False,
-)
-
-ts_stacking_variable = PluginVariable(
-    id="ts_stacking",
-    name="T-stacking",
-    description="Compute T-stacking interactions",
-    type=VariableTypes.BOOLEAN,
-    defaultValue=False,
-)
-
-vdw_variable = PluginVariable(
-    id="vdw",
-    name="Van der Waals",
-    description="Compute VdW interactions",
-    type=VariableTypes.BOOLEAN,
-    defaultValue=False,
-)
-
-hb_variable = PluginVariable(
-    id="hb",
-    name="Hydrogen bonds",
-    description="Compute hydrogen bond interactions",
-    type=VariableTypes.BOOLEAN,
-    defaultValue=True,
 )
 
 output_tsv = PluginVariable(
@@ -67,6 +18,12 @@ output_tsv = PluginVariable(
     allowedValues=["tsv"],
 )
 
+parsed_general_variables = []
+for variable in general_variables:
+    if variable.id in ["cores", "solv"]:
+        continue
+    parsed_general_variables.append(variable)
+
 
 def generate_contacts(block: PluginBlock):
     structure_path = block.inputs["topology"]
@@ -74,7 +31,28 @@ def generate_contacts(block: PluginBlock):
     output_file = structure_name + "_contacts.tsv"
 
     command = "get_static_contacts.py"
-    args = f"--structure {structure_path} --itypes all --output {output_file}"
+    args = f"--structure {structure_path} --output {output_file}"
+
+    # Add to the args the block variables and the itypes
+    itypes = " --itypes"
+    for v in all_itypes:
+        if block.variables[v.id] == True:
+            itypes += f" {v.id}"
+
+    args += itypes
+
+    general_values = ""
+    for variable in parsed_general_variables:
+        value = block.variables.get(variable.id)  # Getting the value or None if not set
+        if value is not None:
+            if variable.id.startswith("sele"):
+                general_values += f' --{variable.id} "{value}"'
+            else:
+                general_values += f" --{variable.id} {value}"
+
+    args += general_values
+
+    # Parse additional commands if necessary
 
     from Utils.call_library import callLibrary
 
@@ -83,19 +61,14 @@ def generate_contacts(block: PluginBlock):
     block.setOutput(output_tsv.id, output_file)
 
 
+# For the get static contacts remove the cores and solvent arguments
+
 get_contacts_block = PluginBlock(
     id="get_static_contacts",
     name="Get static contacts",
     description="Generate a static contact map for a given structure",
     action=generate_contacts,
     inputs=[topology_input_variable],
-    variables=[
-        hb_variable,
-        salt_bridges_variable,
-        pi_cation_variable,
-        pi_stacking_variable,
-        ts_stacking_variable,
-        vdw_variable,
-    ],
+    variables=parsed_general_variables + all_itypes,
     outputs=[output_tsv],
 )
