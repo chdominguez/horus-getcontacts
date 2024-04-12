@@ -164,3 +164,5 @@ vmd-python/
 *.hp
 
 flows/
+
+nostrum_internal/Config
