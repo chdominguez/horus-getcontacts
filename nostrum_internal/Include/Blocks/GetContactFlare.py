@@ -27,15 +27,15 @@ reslabel_chain = PluginVariable(
 )
 
 reslabel_restype = PluginVariable(
-    id="reslabel_restype",
-    name="Residue code",
-    description="The type of residue ALA, VAL...",
+    id="reslabel_start",
+    name="Start residue",
+    description="The starting residue number",
     type=VariableTypes.STRING,
 )
 
 reslabel_resid = PluginVariable(
-    id="reslabel_resid",
-    name="Residue ID",
+    id="reslabel_final",
+    name="Final residue",
     description="The number of the residue",
     type=VariableTypes.NUMBER,
 )
@@ -120,16 +120,30 @@ def generate_flareplot(block: PluginBlock):
             lines = ""
             for rl in reslabels_value:
                 chain = rl["reslabel_chain"]
-                type = rl["reslabel_restype"]
-                resid = rl["reslabel_resid"]
+                res_start = int(rl["reslabel_start"])
+                res_final = int(rl["reslabel_final"])
                 label = rl["reslabel_label"]
                 color = rl["reslabel_color"]
-                residue_string = f"{chain}:{type}:{resid}"
-                if residue_string in all_residues:
-                    all_residues.remove(residue_string)
+                for i in range(res_start, res_final):
+                    res_type = None
+                    for r in all_residues:
+                        rtype = r.split(":")[1]
+                        rid = int(r.split(":")[-1])
+                        if rid == i:
+                            res_type = rtype
 
-                line = f"{residue_string}\t{label}\t{color}\n"
-                lines += line
+                    if res_type is None:
+                        raise Exception(f"Could not infer residue type for res:{i}")
+                    residue_string = f"{chain}:{res_type}:{i}"
+                    if label is None:
+                        parsed_label = residue_string
+                    else:
+                        parsed_label = label + f":{i}"
+                    if residue_string in all_residues:
+                        all_residues.remove(residue_string)
+
+                    line = f"{residue_string}\t{parsed_label}\t{color}\n"
+                    lines += line
 
             # Write labeled residues
             f.write(lines)

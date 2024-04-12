@@ -8,10 +8,10 @@
  * @param containerSelector
  * @returns {{range: (function(number, number)), onChange: (function(Function))}}
  */
-function createFlareplotSlider (flareplot, containerSelector) {
-    var slider = createD3RangeSlider(0, flareplot.getNumFrames()-1, containerSelector, true);
+function createFlareplotSlider(flareplot, containerSelector) {
+    var slider = createD3RangeSlider(0, flareplot.getNumFrames() - 1, containerSelector, true);
     slider.onChange(function (newRange) {
-        flareplot.framesSum(newRange.begin, newRange.end+1);
+        flareplot.framesSum(newRange.begin, newRange.end + 1);
     });
 
     return slider;
@@ -35,12 +35,12 @@ function createFlareplotSlider (flareplot, containerSelector) {
  * @param containerSelector A CSS selection indicating exactly one element in the document
  * @returns {{range: function(number, number), onChange: function(function)}}
  */
-function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton) {
+function createD3RangeSlider(rangeMin, rangeMax, containerSelector, playButton) {
     "use strict";
 
     var minWidth = 10;
 
-    var sliderRange = {begin: rangeMin, end: rangeMin};
+    var sliderRange = { begin: rangeMin, end: rangeMin };
     var changeListeners = [];
     var container = d3.select(containerSelector);
     var playing = false;
@@ -61,8 +61,8 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
             .style("-webkit-box-orient", "horizontal");
 
         var playBox = box.append("div")
-            .style("width", containerHeight + "px")
-            .style("height", containerHeight + "px")
+            .style("width", "40px")
+            .style("height", "40px")
             .style("margin-right", "10px")
             .style("box-flex", "0")
             .style("-moz-box-flex", "0")
@@ -71,7 +71,7 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
 
         var sliderBox = box.append("div")
             .style("position", "relative")
-            .style("min-width", (minWidth*2) + "px")
+            .style("min-width", (minWidth * 2) + "px")
             .style("height", containerHeight + "px")
             .style("box-flex", "1")
             .style("-moz-box-flex", "1")
@@ -79,8 +79,8 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
             .classed("slider-container", true);
 
         var playSVG = playBox.append("svg")
-            .attr("width", containerHeight + "px")
-            .attr("height", containerHeight + "px")
+            .style("width", "40px")
+            .style("height", "40px")
             .style("overflow", "visible");
 
         var circleSymbol = playSVG.append("circle")
@@ -91,15 +91,15 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
 
         var h = containerHeight;
         var stopSymbol = playSVG.append("rect")
-            .attr("x", 0.3*h)
-            .attr("y", 0.3*h)
-            .attr("width", 0.4*h)
-            .attr("height", 0.4*h)
+            .attr("x", 0.3 * h)
+            .attr("y", 0.3 * h)
+            .attr("width", 0.4 * h)
+            .attr("height", 0.4 * h)
             .style("visibility", "hidden")
             .classed("stop", true);
 
         var playSymbol = playSVG.append("polygon")
-            .attr("points", (0.37*h) + "," + (0.2*h) + " " + (0.37*h) + "," + (0.8*h) + " " + (0.75*h) + "," + (0.5*h))
+            .attr("points", (0.37 * h) + "," + (0.2 * h) + " " + (0.37 * h) + "," + (0.8 * h) + " " + (0.75 * h) + "," + (0.5 * h))
             .classed("play", true);
 
         //Circle that captures mouse interactions
@@ -110,7 +110,7 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
             .style("fill-opacity", "0.0")
             .style("cursor", "pointer")
             .on("click", togglePlayButton)
-            .on("mouseenter", function(){
+            .on("mouseenter", function () {
                 circleSymbol
                     .transition()
                     .attr("r", 1.2 * containerHeight / 2)
@@ -123,7 +123,7 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
         sliderBox = container.append("div")
             .style("position", "relative")
             .style("height", containerHeight + "px")
-            .style("min-width", (minWidth*2) + "px")
+            .style("min-width", (minWidth * 2) + "px")
             .classed("slider-container", true);
     }
 
@@ -135,7 +135,7 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
     var handleE = slider.append("div").attr("class", "handle EE");
 
     /** Update the `left` and `width` attributes of `slider` based on `sliderRange` */
-    function updateUIFromRange () {
+    function updateUIFromRange() {
         var conW = sliderBox.node().clientWidth;
         var rangeW = sliderRange.end - sliderRange.begin;
         var slope = (conW - minWidth) / (rangeMax - rangeMin);
@@ -152,7 +152,7 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
     }
 
     /** Update the `sliderRange` based on the `left` and `width` attributes of `slider` */
-    function updateRangeFromUI () {
+    function updateRangeFromUI() {
         var uirangeL = parseFloat(slider.style("left"));
         var uirangeW = parseFloat(slider.style("width"));
         var conW = sliderBox.node().clientWidth; //parseFloat(container.style("width"));
@@ -169,7 +169,7 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
 
         //Fire change listeners
         changeListeners.forEach(function (callback) {
-            callback({begin: sliderRange.begin, end: sliderRange.end});
+            callback({ begin: sliderRange.begin, end: sliderRange.end });
         });
     }
 
@@ -211,7 +211,7 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
         })
         .on("drag", function () {
             var dx = d3.mouse(this)[0] - this.startX;
-            if (dx==0) return;
+            if (dx == 0) return;
             var newLeft = parseFloat(slider.style("left")) + dx;
             var newWidth = parseFloat(slider.style("width")) - dx;
 
@@ -277,12 +277,12 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
         updateUIFromRange();
     });
 
-    function onChange(callback){
+    function onChange(callback) {
         changeListeners.push(callback);
         return this;
     }
 
-    function setRange (b, e) {
+    function setRange(b, e) {
         sliderRange.begin = b;
         sliderRange.end = e;
 
@@ -290,7 +290,7 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
 
         //Fire change listeners
         changeListeners.forEach(function (callback) {
-            callback({begin: sliderRange.begin, end: sliderRange.end});
+            callback({ begin: sliderRange.begin, end: sliderRange.end });
         });
     }
 
@@ -335,7 +335,7 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
                 console.log("Warning: trying to set range (" + rLower + "," + rUpper + ") which is outside of bounds (" + rangeMin + "," + rangeMax + "). ");
                 rLower = rangeMin;
             }
-            if(rUpper > rangeMax){
+            if (rUpper > rangeMax) {
                 console.log("Warning: trying to set range (" + rLower + "," + rUpper + ") which is outside of bounds (" + rangeMin + "," + rangeMax + "). ");
                 rLower = rangeMax - dif;
                 rUpper = rangeMax;
@@ -344,10 +344,10 @@ function createD3RangeSlider (rangeMin, rangeMax, containerSelector, playButton)
             setRange(rLower, rUpper);
         }
 
-        return {begin: sliderRange.begin, end: sliderRange.end};
+        return { begin: sliderRange.begin, end: sliderRange.end };
     }
 
-    function togglePlayButton () {
+    function togglePlayButton() {
         if (playing) {
             stopPlaying();
         } else {
