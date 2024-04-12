@@ -65,7 +65,7 @@ def generate_dynamic_contacts(block: PluginBlock):
 generate_dynamic_contacts_block = PluginBlock(
     id="generate_dynamic_contacts",
     name="Get dynamic contacts",
-    description="Generate a dybamic contact map for a given simulation",
+    description="Generate a dynamic contact map for a given simulation",
     action=generate_dynamic_contacts,
     inputs=[topology_input_variable, trajectory_input_variable],
     variables=all_variables,
