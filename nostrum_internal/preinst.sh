@@ -19,7 +19,7 @@ if ! command -v $command &> /dev/null; then
     eval "$(micromamba shell hook --shell bash)"
 else
     # Init conda
-    conda init $SHELL
+    eval "$(conda shell.bash hook)"
 fi
 
 echo "Installing environment..."
