@@ -11,7 +11,7 @@ if ! command -v $command &> /dev/null; then
     echo "Trying micromamba...."
     command="micromamba"
     if ! command -v $command &> /dev/null; then
-        echo "Error: Command '$command' not found, exiting..." >&2
+        echo "Error: Neither conda or micromamba found, exiting..." >&2
         exit 1
     fi
 
