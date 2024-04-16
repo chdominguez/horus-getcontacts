@@ -22,7 +22,6 @@ solvent = PluginVariable(
     id="solv",
     name="Solvent",
     description="The solvent, if any",
-    defaultValue="TIP3",
     type=VariableTypes.STRING,
 )
 

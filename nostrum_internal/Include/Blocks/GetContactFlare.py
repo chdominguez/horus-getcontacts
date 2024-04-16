@@ -121,7 +121,9 @@ def generate_flareplot(block: PluginBlock):
             for rl in reslabels_value:
                 chain = rl["reslabel_chain"]
                 res_start = int(rl["reslabel_start"])
-                res_final = int(rl["reslabel_final"])
+                res_final = (
+                    int(rl["reslabel_final"]) + 1  # +1 for range to work correctly
+                )
                 label = rl["reslabel_label"]
                 color = rl["reslabel_color"]
                 for i in range(res_start, res_final):

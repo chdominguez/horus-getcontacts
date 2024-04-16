@@ -166,3 +166,5 @@ vmd-python/
 flows/
 
 nostrum_internal/Config
+
+.DS_Store

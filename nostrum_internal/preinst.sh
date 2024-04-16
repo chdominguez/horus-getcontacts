@@ -4,6 +4,8 @@ echo "This plugin needs several software to be installed in your computer in ord
 
 echo "Assuming conda is intalled..."
 
+dependencies="python=3.9 numpy scipy expat matplotlib scikit-learn pytest pandas seaborn cython tk=8.6 vmd-python libnetcdf"
+
 # Find if conda is installed
 command="conda"
 if ! command -v $command &> /dev/null; then
@@ -11,8 +13,14 @@ if ! command -v $command &> /dev/null; then
     echo "Trying micromamba...."
     command="micromamba"
     if ! command -v $command &> /dev/null; then
-        echo "Error: Neither conda or micromamba found, exiting..." >&2
-        exit 1
+        echo "==============ERROR==============="
+        echo "Neither conda or micromamba found" >&2
+        echo "You will need to install the "nostrum_internal_plugin" environment manually:"
+         echo "conda create -n nostrum_internal_plugin"
+        echo "conda activate nostrum_internal_plugin"
+        echo "conda install -c conda-forge $dependencies"
+        echo "=================================="
+        exit 0
     fi
 
     # Init micromamba
@@ -25,6 +33,7 @@ fi
 
 if { $command env list | grep 'nostrum_internal_plugin'; } >/dev/null 2>&1; then
     echo "Environment already exists..."
+    $command env list | grep 'nostrum_internal_plugin'
 else
     echo "Installing environment..."
 
@@ -39,5 +48,5 @@ else
     # fi
 
     # Install dependencies
-    yes | $command install -c conda-forge python=3.9 numpy scipy expat matplotlib scikit-learn pytest pandas seaborn cython tk=8.6 vmd-python libnetcdf
+    yes | $command install -c conda-forge $dependencies
 fi
