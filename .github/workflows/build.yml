@@ -1,0 +1,40 @@
+name: Build and Release Plugin
+
+on:
+  push:
+    tags:
+      - "*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the plugin
+        run: bash build_plugin.sh
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            *.hp
+
+      - name: Upload to Horus plugin repository
+        run: |
+          # Install jq and curl
+          sudo apt install jq curl -y
+
+          echo "Uploading plugin to Horus repository"
+
+          FILE=$(ls *.hp)
+
+          curl -X 'POST' \
+          'https://horus.bsc.es/repo_api/plugins/' \
+          -H 'accept: application/json' \
+          -H 'Content-Type: multipart/form-data' \
+          -F "description=$(jq -Rs . < README.md)" \
+          -F 'file=@$FILE' \
+          -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}"
