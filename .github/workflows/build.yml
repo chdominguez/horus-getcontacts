@@ -31,11 +31,10 @@ jobs:
           echo "Uploading plugin to Horus repository"
 
           FILE=$(ls *.hp)
-
           curl -X 'POST' \
           'https://horus.bsc.es/repo_api/plugins/' \
           -H 'accept: application/json' \
           -H 'Content-Type: multipart/form-data' \
           -F "description=$(jq -Rs . < README.md)" \
-          -F 'file=@$FILE' \
+          -F "file=@$FILE" \
           -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}"
