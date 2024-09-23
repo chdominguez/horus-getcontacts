@@ -22,12 +22,12 @@ if [ -z "$TAG" ]; then
 
     # If no latest tag, use 0.0.0
     if [ -z "$LATEST_TAG" ]; then
-        LATEST_TAG="0.0.0"
+        LATEST_TAG="1.0"
     fi
 
     VERSION="${LATEST_TAG}-${VERSION}"
 else
-    VERSION=$(echo $TAG | sed 's/[^a-zA-Z0-9]/_/g')
+    VERSION=$(echo $TAG | sed 's/[^a-zA-Z0-9.]/_/g')
 fi
 
 # Update the plugin.meta
@@ -41,6 +41,3 @@ zip -r $ZIP_FILE $PLUGIN_NAME
 
 # Restore the plugin.meta back to version 0.0.0
 jq '.version = "0.0.0"' $META_FILE > tmp.$$.json && mv tmp.$$.json $META_FILE
-
-
-zip -r $ZIP_FILE $PLUGIN_NAME
