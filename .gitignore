@@ -165,6 +165,12 @@ vmd-python/
 
 flows/
 
-nostrum_internal/Config
+FlarePlot/Config
 
 .DS_Store
+
+FlarePlot/Pages 
+
+node_modules
+
+.vscode/

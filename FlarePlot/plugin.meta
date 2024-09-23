@@ -1,0 +1,9 @@
+{
+  "id": "getcontacts_flareplot",
+  "name": "GetContacts - FlarePlot",
+  "description": "Calculate and illustrate contacts between residues in PDB files or molecular dynamics trajectories.",
+  "author": "Christian Dominguez",
+  "version": "0.0.0",
+  "pluginFile": "plugin.py",
+  "dependencies": []
+}

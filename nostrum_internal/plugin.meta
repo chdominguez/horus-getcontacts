@@ -1,8 +1,0 @@
-{
-  "name": "Nostrum Internal",
-  "description": "Internal tools for use in Nostrum Biodiscovery HQ",
-  "author": "Nostrum Biodiscovery",
-  "version": "0.0.1",
-  "pluginFile": "plugin.py",
-  "dependencies": []
-}
