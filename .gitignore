@@ -163,7 +163,9 @@ vmd-python/
 
 *.hp
 
-flows/
+flows
+
+!FlarePlot/Flows
 
 FlarePlot/Config
 
