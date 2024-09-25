@@ -1,9 +1,9 @@
 {
   "scripts": {
-    "build-parcel": "parcel build src/flare_view.html --dist-dir FlarePlot/Pages --public-url ./",
-    "build": "mkdir -p FlarePlot/Pages && cp -r src/* FlarePlot/Pages",
-    "dev": "parcel watch src/flare_view.html --dist-dir FlarePlot/Pages --public-url ./",
-    "clean": "rm -rf FlarePlot/Pages .parcel-cache"
+    "build-parcel": "parcel build src/flare_view.html --dist-dir getcontacts-flareplot/Pages --public-url ./",
+    "build": "mkdir -p getcontacts-flareplot/Pages && cp -r src/* getcontacts-flareplot/Pages",
+    "dev": "parcel watch src/flare_view.html --dist-dir getcontacts-flareplot/Pages --public-url ./",
+    "clean": "rm -rf getcontacts-flareplot/Pages .parcel-cache"
   },
   "dependencies": {
     "eslint": "^9.11.0",

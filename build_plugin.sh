@@ -3,7 +3,7 @@
 echo "Building plugin..."
 
 
-PLUGIN_NAME="FlarePlot"
+PLUGIN_NAME="getcontacts-flareplot"
 
 rm -rf *.hp
 

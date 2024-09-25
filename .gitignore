@@ -165,13 +165,13 @@ vmd-python/
 
 flows
 
-!FlarePlot/Flows
+!getcontacts-flareplot/Flows
 
-FlarePlot/Config
+getcontacts-flareplot/Config
 
 .DS_Store
 
-FlarePlot/Pages 
+getcontacts-flareplot/Pages 
 
 node_modules
 

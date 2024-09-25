@@ -9,7 +9,9 @@ from HorusAPI import PluginBlock
 from Config.conda import conda_env_name_variable, conda_path_variable
 
 
-def callLibrary(command: str, args: str, block: PluginBlock):
+def callLibrary(
+    command: str, args: str, block: PluginBlock, print_license: bool = True
+):
     """
     Will run the command on the right path
     """
@@ -22,12 +24,14 @@ def callLibrary(command: str, args: str, block: PluginBlock):
     conda_path = block.config[conda_path_variable.id]
     command = os.path.join(include_path, "getcontacts", command)
 
-    # Read the license file
-    license = ""
-    with open(os.path.join(include_path, "getcontacts", "LICENSE")) as f:
-        license = f.read()
+    if print_license:
+        # Read the license file
+        license = ""
+        with open(os.path.join(include_path, "getcontacts", "LICENSE")) as f:
+            license = f.read()
 
-    print(license)
+        print(license)
+
     print(
         "command: ",
         f"{conda_path} run -n {env_name} python '{command}' {args}",

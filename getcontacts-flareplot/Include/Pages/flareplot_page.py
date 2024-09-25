@@ -14,6 +14,13 @@ def fetch_flarefile():
 
     file = request.args.get("flarefile")
 
+    if file is None:
+        return "Flare file not found", 404
+
+    # Check the extension to be json or tsv
+    if not file.endswith(".json") and not file.endswith(".tsv"):
+        return "Invalid file type", 400
+
     return send_file(file, as_attachment=True)
 
 
